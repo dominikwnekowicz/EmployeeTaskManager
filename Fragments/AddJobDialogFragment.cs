@@ -9,10 +9,11 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using FakroApp.Model;
 using FakroApp.Persistance;
 using static FakroApp.Persistance.Constants;
 
-namespace FakroApp.Model
+namespace FakroApp.Fragments
 {
     class AddJobDialogFragment : Android.Support.V4.App.DialogFragment
     {
@@ -22,7 +23,7 @@ namespace FakroApp.Model
         {
             base.OnCreateView(inflater, container, savedInstanceState);
 
-            view = inflater.Inflate(Resource.Layout.addJob_dialog, container, false);
+            view = inflater.Inflate(Resource.Layout.dialog_addJob, container, false);
 
             var addJobDialogButton = view.FindViewById<Button>(Resource.Id.AddJobDialogButton);
             addJobDialogButton.Click += AddJobDialogButton_Click;

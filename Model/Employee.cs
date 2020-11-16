@@ -15,19 +15,12 @@ namespace FakroApp.Model
 {
     public class Employee
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-
-        [NotNull]
         public string FirstName { get; set; }
 
-        [NotNull]
         public string LastName { get; set; }
 
-        [NotNull]
-        public string Login { get; set; }
+        public string Identifier { get; set; }
 
-        [NotNull]
         public int PackerCode { get; set; }
 
         public DateTime WorkingSince{ get; set; }

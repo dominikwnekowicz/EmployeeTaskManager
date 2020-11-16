@@ -15,7 +15,7 @@ using static FakroApp.Persistance.Constants;
 
 namespace FakroApp.Adapters
 {
-    class JobAdapter : BaseAdapter<Job>
+    class JobListViewAdapter : BaseAdapter<Job>
     {
 
         private Activity activity;
@@ -23,7 +23,7 @@ namespace FakroApp.Adapters
         private List<Work> works;
         private Database database;
 
-        public JobAdapter(Activity activity, List<Job> jobs)
+        public JobListViewAdapter(Activity activity, List<Job> jobs)
         {
             this.activity = activity;
             this.jobs = jobs;
@@ -44,7 +44,7 @@ namespace FakroApp.Adapters
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            var view = activity.LayoutInflater.Inflate(Resource.Layout.job_layout, null);
+            var view = activity.LayoutInflater.Inflate(Resource.Layout.layout_job, null);
 
             var job = jobs[position];
             var work = works.FirstOrDefault(w => w.Id == job.WorkId);

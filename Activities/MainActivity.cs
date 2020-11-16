@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Android.Content;
+using FakroApp.Fragments;
 
 namespace FakroApp.Activities
 {
@@ -24,7 +25,7 @@ namespace FakroApp.Activities
         SupportToolbar toolbar;
         List<Job> jobs;
         ListView jobsListView;
-        JobAdapter jobsListViewAdapter;
+        JobListViewAdapter jobsListViewAdapter;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -38,7 +39,7 @@ namespace FakroApp.Activities
             database = new Database();
             jobs = (List<Job>)database.GetItems(this, JOB_TABLE_NAME).Result;
             jobsListView = FindViewById<ListView>(Resource.Id.jobsListView);
-            jobsListViewAdapter = new JobAdapter(this, jobs);
+            jobsListViewAdapter = new JobListViewAdapter(this, jobs);
             jobsListView.Adapter = jobsListViewAdapter;
 
             double monthNormsSum = 0;
@@ -86,7 +87,7 @@ namespace FakroApp.Activities
         public void OnDismiss(IDialogInterface dialog)
         {
             jobs = (List<Job>)database.GetItems(this, JOB_TABLE_NAME).Result;
-            jobsListViewAdapter = new JobAdapter(this, jobs);
+            jobsListViewAdapter = new JobListViewAdapter(this, jobs);
             jobsListView.Adapter = jobsListViewAdapter;
         }
     }

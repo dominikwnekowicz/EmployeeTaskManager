@@ -65,10 +65,6 @@ namespace FakroApp.Persistance
                     if (!tableExist) dbConnection.CreateTable<DayOff>();
                     data = dbConnection.Table<DayOff>().OrderBy(d => d.From).ThenBy(d => d.Id).ToList();
                     return data;
-                case EMPLOYEE_TABLE_NAME:
-                    if (!tableExist) dbConnection.CreateTable<Employee>();
-                    data = dbConnection.Table<Employee>().ToList();
-                    return data;
                 case JOB_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<Job>();
                     data = dbConnection.Table<Job>().OrderBy(j => j.Date).ToList();
@@ -89,11 +85,6 @@ namespace FakroApp.Persistance
                 case DAYOFF_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<DayOff>();
                     foreach (var item in data as List<DayOff>) dbConnection.Insert(item);
-                    OnDataChanged(tableName);
-                    return;
-                case EMPLOYEE_TABLE_NAME:
-                    if (!tableExist) dbConnection.CreateTable<Employee>();
-                    foreach (var item in data as List<Employee>) dbConnection.Insert(item);
                     OnDataChanged(tableName);
                     return;
                 case JOB_TABLE_NAME:
@@ -119,11 +110,6 @@ namespace FakroApp.Persistance
                     dbConnection.Insert((DayOff)data);
                     OnDataChanged(tableName);
                     return;
-                case EMPLOYEE_TABLE_NAME:
-                    if (!tableExist) dbConnection.CreateTable<Employee>();
-                    dbConnection.Insert((Employee)data);
-                    OnDataChanged(tableName);
-                    return;
                 case JOB_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<Job>();
                     dbConnection.Insert((Job)data);
@@ -145,11 +131,6 @@ namespace FakroApp.Persistance
                 case DAYOFF_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<DayOff>();
                     foreach (var item in data as List<DayOff>) dbConnection.Update(item);
-                    OnDataChanged(tableName);
-                    return;
-                case EMPLOYEE_TABLE_NAME:
-                    if (!tableExist) dbConnection.CreateTable<Employee>();
-                    foreach (var item in data as List<Employee>) dbConnection.Update(item);
                     OnDataChanged(tableName);
                     return;
                 case JOB_TABLE_NAME:
@@ -175,11 +156,6 @@ namespace FakroApp.Persistance
                     dbConnection.Update((DayOff)data);
                     OnDataChanged(tableName);
                     return;
-                case EMPLOYEE_TABLE_NAME:
-                    if (!tableExist) dbConnection.CreateTable<Employee>();
-                    dbConnection.Update((Employee)data);
-                    OnDataChanged(tableName);
-                    return;
                 case JOB_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<Job>();
                     dbConnection.Update((Job)data);
@@ -203,11 +179,6 @@ namespace FakroApp.Persistance
                     foreach (var item in data as List<DayOff>) dbConnection.Delete(item);
                     OnDataChanged(tableName);
                     return;
-                case EMPLOYEE_TABLE_NAME:
-                    if (!tableExist) dbConnection.CreateTable<Employee>();
-                    foreach (var item in data as List<Employee>) dbConnection.Delete(item);
-                    OnDataChanged(tableName);
-                    return;
                 case JOB_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<Job>();
                     foreach (var item in data as List<Job>) dbConnection.Delete(item);
@@ -228,11 +199,6 @@ namespace FakroApp.Persistance
                 case DAYOFF_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<DayOff>();
                     dbConnection.Delete((DayOff)data);
-                    OnDataChanged(tableName);
-                    return;
-                case EMPLOYEE_TABLE_NAME:
-                    if (!tableExist) dbConnection.CreateTable<Employee>();
-                    dbConnection.Delete((Employee)data);
                     OnDataChanged(tableName);
                     return;
                 case JOB_TABLE_NAME:

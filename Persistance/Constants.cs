@@ -16,7 +16,6 @@ namespace FakroApp.Persistance
     {
         //Table names
         public const string DAYOFF_TABLE_NAME = "DayOff";
-        public const string EMPLOYEE_TABLE_NAME = "Employee";
         public const string JOB_TABLE_NAME = "Job";
 
         //Job types
