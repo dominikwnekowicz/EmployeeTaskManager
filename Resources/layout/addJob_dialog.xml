@@ -1,0 +1,112 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:minWidth="300dp"
+    android:padding="5dp"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:textColor="@android:color/black"
+        android:textSize="16dp"
+        android:textAlignment="center"
+        android:text="@string/AddJob"
+        android:id="@+id/addJobDialogTitleTextView"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_below="@id/addJobDialogTitleTextView"
+        android:id="@+id/workIdLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Id zadania: "
+            android:textAlignment="center"
+            android:width="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/WorkIdEditText"
+            android:width="200dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+        
+        <LinearLayout
+        android:layout_below="@id/workIdLinearLayout"
+        android:padding="10dp"
+        android:id="@+id/QuantityLinearLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Ilość: "
+            android:width="100dp"
+            android:textAlignment="center"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:gravity="center" />
+
+        <NumberPicker
+            android:id="@+id/QuantityNumberPicker"
+            android:width="200dp"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"/>
+
+    </LinearLayout>
+        
+        <LinearLayout
+        android:layout_below="@id/QuantityLinearLayout"
+        android:id="@+id/JobTypeLinearLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Typ: "
+            android:textAlignment="center"
+            android:width="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Spinner
+            android:entries="@array/jobTypes_DropdownArray"
+            android:width="200dp"
+            android:id="@+id/JobTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+        
+        <LinearLayout
+        android:layout_below="@id/JobTypeLinearLayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/CancelAddJobDialogButton"
+            android:text="@string/Cancel"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/AddJobDialogButton"
+            android:text="@string/Add"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

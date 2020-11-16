@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:visibility="gone"
+        android:textColor="@color/colorAccent"
+        android:id="@+id/jobDateTextView"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <View
+        android:id="@+id/jobDateDividerView"
+        android:paddingVertical="5dp"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
+        />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:id="@+id/jobNameTextView"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            />
+        <TextView
+            android:id="@+id/jobTimeTextView"
+            android:layout_width="75dp"
+            android:gravity="end"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"/>
+    </LinearLayout>>
+    <View style="@style/Divider"/>
+
+</LinearLayout>

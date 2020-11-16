@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">FakroApp</string>
+    <string name="action_settings">Settings</string>
+
+  <!--Job types-->
+    <string name="Current">Aktualna</string>
+    <string name="Reserve">Na zapas</string>
+
+    <!--Day off types-->
+    <string name="Leave">Urlop</string>
+    <string name="UnpaidLeave">Bezpłatny urlop</string>
+    <string name="SickLeave">Chorobowe</string>
+
+  <string-array name="jobTypes_DropdownArray">
+    <item>@string/Current</item>
+    <item>@string/Reserve</item>
+  </string-array>
+
+  <!--Texts-->
+  <string name="Cancel">Anuluj</string>
+  <string name="Add">Dodaj</string>
+  <string name="Ok">Zatwierdź</string>
+
+  <string name="AddJob">Dodaj robotę</string>
+
+</resources>

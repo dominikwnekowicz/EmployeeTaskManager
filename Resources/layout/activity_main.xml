@@ -1,0 +1,71 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainToolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?android:attr/colorPrimary"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark" />
+
+
+    <ListView
+        android:listSelector="@android:color/transparent"
+        android:stackFromBottom="true"
+        android:layout_below="@id/mainToolbar"
+        android:layout_above="@id/jobsBottomLinearLayout"
+        android:id="@+id/jobsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:id="@+id/jobsBottomLinearLayout"
+        android:layout_height="wrap_content">
+        
+    
+
+    <View style="@style/Divider" android:layout_height="2dp" android:background="@android:color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:padding="5dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/monthNormTextView"
+        />
+
+        <View style="@style/Divider" android:layout_height="2dp" android:background="@android:color/black"/>
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        >
+        <ImageButton
+            android:text="@string/AddJob"
+            android:id="@+id/AddJobButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/ic_menu_add"
+            android:background="@android:color/white"
+            />
+    </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
