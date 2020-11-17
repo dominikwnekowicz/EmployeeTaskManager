@@ -1,38 +1,34 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:minWidth="300dp"
-    android:padding="5dp"
     android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
         android:layout_width="match_parent"
         android:padding="10dp"
         android:textColor="@android:color/black"
         android:textSize="16dp"
         android:textAlignment="center"
-        android:text="@string/AddJob"
-        android:id="@+id/addJobDialogTitleTextView"
+        android:text="@string/AddWork"
+        android:id="@+id/addWorkDialogTitleTextView"
         android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:padding="10dp"
-        android:visibility="gone"
-        android:id="@+id/addJobDialogDescriptionLinearLayout"
+        android:id="@+id/addWorkDialogWorkCodeLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="Opis: "
+            android:text="Kod zadania: "
             android:textAlignment="center"
             android:width="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <EditText
-            android:id="@+id/addJobDialogDescriptionEditText"
+            android:id="@+id/addWorkDialogWorkCodeEditText"
             android:width="200dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -42,99 +38,65 @@
     <LinearLayout
         android:orientation="horizontal"
         android:padding="10dp"
-        android:id="@+id/addJobDialogWorkIdLinearLayout"
+        android:id="@+id/addWorkDialogNameLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="Robota: "
+            android:text="Nazwa: "
             android:textAlignment="center"
-            android:id="@+id/addJobDialogChooseWorkTextView"
             android:width="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <Button
-            android:id="@+id/addJobDialogChooseWorkButton"
-            android:text="@string/Choose"
-            style="@style/ButtonStyle"
+        <EditText
+            android:id="@+id/addWorkNameCodeEditText"
             android:width="200dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
-        
-        <LinearLayout
-        android:padding="10dp"
-        android:id="@+id/addJobDialogQuantityLinearLayout"
+
+    <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:text="Ilość: "
-            android:width="100dp"
-            android:textAlignment="center"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:gravity="center" />
-
-        <NumberPicker
-            android:id="@+id/addJobDialogQuantityNumberPicker"
-            android:width="200dp"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"/>
-
-    </LinearLayout>
-        
-        <LinearLayout
-        android:id="@+id/addJobDialogJobTypeLinearLayout"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
         android:padding="10dp"
+        android:id="@+id/addWorkDialogNormLinearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="Typ: "
+            android:text="Norma: "
             android:textAlignment="center"
             android:width="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <Spinner
-            android:entries="@array/jobTypes_DropdownArray"
+        <EditText
+            android:id="@+id/addWorkNormCodeEditText"
+            android:inputType="number"
+            android:digits="0123456789.,"
             android:width="200dp"
-            android:id="@+id/addJobDialogJobTypeSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
-    <CheckBox
-        android:text="@string/NotNormalized"
-        android:checked="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/addJobDialogIsNotNormalizedCheckBox"
-        android:layout_gravity="center_horizontal"
-    />
-
-        <LinearLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:padding="10dp"
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/addJobDialogCancelButton"
+            android:id="@+id/addWorkDialogCancelButton"
             android:text="@string/Cancel"
-            style="@style/ButtonStyle"
             android:layout_weight="1"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <Button
-            android:id="@+id/addJobDialogAddButton"
+            android:id="@+id/addWorkDialogAddButton"
             android:text="@string/Add"
             style="@style/ButtonStyle"
             android:layout_weight="1"
@@ -142,5 +104,4 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
-
 </LinearLayout>

@@ -69,6 +69,10 @@ namespace FakroApp.Persistance
                     if (!tableExist) dbConnection.CreateTable<Job>();
                     data = dbConnection.Table<Job>().OrderBy(j => j.Date).ToList();
                     return data;
+                case WORK_TABLE_NAME:
+                    if (!tableExist) dbConnection.CreateTable<Work>();
+                    data = dbConnection.Table<Work>().OrderBy(j => j.Name).ToList();
+                    return data;
                 default:
                     return null;
             }
@@ -90,6 +94,11 @@ namespace FakroApp.Persistance
                 case JOB_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<Job>();
                     foreach (var item in data as List<Job>) dbConnection.Insert(item);
+                    OnDataChanged(tableName);
+                    return;
+                case WORK_TABLE_NAME:
+                    if (!tableExist) dbConnection.CreateTable<Work>();
+                    foreach (var item in data as List<Work>) dbConnection.Insert(item);
                     OnDataChanged(tableName);
                     return;
                 default:
@@ -115,6 +124,11 @@ namespace FakroApp.Persistance
                     dbConnection.Insert((Job)data);
                     OnDataChanged(tableName);
                     return;
+                case WORK_TABLE_NAME:
+                    if (!tableExist) dbConnection.CreateTable<Work>();
+                    dbConnection.Insert((Work)data);
+                    OnDataChanged(tableName);
+                    return;
                 default:
                     return;
             }
@@ -136,6 +150,11 @@ namespace FakroApp.Persistance
                 case JOB_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<Job>();
                     foreach (var item in data as List<Job>) dbConnection.Update(item);
+                    OnDataChanged(tableName);
+                    return;
+                case WORK_TABLE_NAME:
+                    if (!tableExist) dbConnection.CreateTable<Work>();
+                    foreach (var item in data as List<Work>) dbConnection.Update(item);
                     OnDataChanged(tableName);
                     return;
                 default:
@@ -161,6 +180,11 @@ namespace FakroApp.Persistance
                     dbConnection.Update((Job)data);
                     OnDataChanged(tableName);
                     return;
+                case WORK_TABLE_NAME:
+                    if (!tableExist) dbConnection.CreateTable<Work>();
+                    dbConnection.Update((Work)data);
+                    OnDataChanged(tableName);
+                    return;
                 default:
                     return;
             }
@@ -184,6 +208,11 @@ namespace FakroApp.Persistance
                     foreach (var item in data as List<Job>) dbConnection.Delete(item);
                     OnDataChanged(tableName);
                     return;
+                case WORK_TABLE_NAME:
+                    if (!tableExist) dbConnection.CreateTable<Work>();
+                    foreach (var item in data as List<Work>) dbConnection.Delete(item);
+                    OnDataChanged(tableName);
+                    return;
                 default:
                     return;
             }
@@ -204,6 +233,11 @@ namespace FakroApp.Persistance
                 case JOB_TABLE_NAME:
                     if (!tableExist) dbConnection.CreateTable<Job>();
                     dbConnection.Delete((Job)data);
+                    OnDataChanged(tableName);
+                    return;
+                case WORK_TABLE_NAME:
+                    if (!tableExist) dbConnection.CreateTable<Work>();
+                    dbConnection.Delete((Work)data);
                     OnDataChanged(tableName);
                     return;
                 default:

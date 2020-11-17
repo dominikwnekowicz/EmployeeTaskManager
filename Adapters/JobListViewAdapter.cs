@@ -28,7 +28,7 @@ namespace FakroApp.Adapters
             this.activity = activity;
             this.jobs = jobs;
             this.database = new Database();
-            this.works = Work.GetWorks();
+            this.works = (List<Work>)database.GetItems(activity, WORK_TABLE_NAME).Result;
         }
 
 

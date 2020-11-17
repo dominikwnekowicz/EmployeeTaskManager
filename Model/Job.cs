@@ -29,6 +29,9 @@ namespace FakroApp.Model
         [NotNull]
         public string Type { get; set; }
 
-        public string WorkId { get; set; }
+        public int WorkId { get; set; }
+
+        [NotNull]
+        public bool NotNormalized { get; set; }
     }
 }

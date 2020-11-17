@@ -20,7 +20,10 @@
   <string name="Cancel">Anuluj</string>
   <string name="Add">Dodaj</string>
   <string name="Ok">Zatwierdź</string>
-
+  <string name="NotNormalized">Nienormowane</string>
+  <string name="Choose">Wybierz</string>
+  <string name="Change">Zmień</string>
   <string name="AddJob">Dodaj robotę</string>
+  <string name="AddWork">Dodaj zadanie</string>
 
 </resources>
