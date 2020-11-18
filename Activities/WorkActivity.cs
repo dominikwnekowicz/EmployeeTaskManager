@@ -16,12 +16,15 @@ using FakroApp.Adapters;
 using FakroApp.Persistance;
 using static FakroApp.Persistance.Constants;
 using Refractored.Fab;
+using FakroApp.Fragments;
 
 namespace FakroApp.Activities
 {
     [Activity(Label = "WorksActivity")]
-    public class WorksActivity : AppCompatActivity
+    public class WorkActivity : AppCompatActivity, IDialogInterfaceOnDismissListener
     {
+        const string TAG = "WorksActivity";
+
         SupportToolbar toolbar;
         ListView worksListView;
         List<Work> works;
@@ -32,6 +35,7 @@ namespace FakroApp.Activities
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.activity_work);
+            SetResult(Result.Canceled);
 
             toolbar = FindViewById<SupportToolbar>(Resource.Id.workToolbar);
             SetSupportActionBar(toolbar);
@@ -59,7 +63,9 @@ namespace FakroApp.Activities
 
         private void WorkFloatingActionButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
+            AddWorkDialogFragment dialog_AddWork = new AddWorkDialogFragment();
+            dialog_AddWork.Show(transaction, TAG);
         }
 
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -74,6 +80,13 @@ namespace FakroApp.Activities
                 default:
                     return base.OnOptionsItemSelected(item);
             }
+        }
+
+        public void OnDismiss(IDialogInterface dialog)
+        {
+            works = (List<Work>)database.GetItems(this, WORK_TABLE_NAME).Result;
+            worksListViewAdapter = new WorkListViewAdapter(this, works);
+            worksListView.Adapter = worksListViewAdapter;
         }
     }
 }

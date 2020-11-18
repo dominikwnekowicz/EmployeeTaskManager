@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\MainActivity.cs" />
-    <Compile Include="Activities\WorksActivity.cs" />
+    <Compile Include="Activities\WorkActivity.cs" />
     <Compile Include="Adapters\JobListViewAdapter.cs" />
     <Compile Include="Adapters\WorkListViewAdapter.cs" />
     <Compile Include="Fragments\AddWorkDialogFragment.cs" />

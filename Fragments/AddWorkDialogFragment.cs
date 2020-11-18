@@ -40,31 +40,40 @@ namespace FakroApp.Fragments
             Dismiss();
         }
 
+        private string ChangeSymbols(string text)
+        {
+            foreach(var character in text)
+            {
+                if (!Char.IsDigit(character) && character != ',') text = text.Replace(character, ',');
+            }
+            return text;
+        }
+
         private void AddWorkDialogButton_Click(object sender, EventArgs e)
         {
             Database database = new Database();
 
-            EditText workIdEditText = view.FindViewById<EditText>(Resource.Id.addJobDialogDescriptionEditText);
-            var workCode = workIdEditText.Text.Replace(".", ",");
+            EditText addWorkDialogWorkCodeEditText = view.FindViewById<EditText>(Resource.Id.addWorkDialogWorkCodeEditText);
+            var workCode = ChangeSymbols(addWorkDialogWorkCodeEditText.Text);
             var works = (List<Work>)database.GetItems(this.Activity, WORK_TABLE_NAME).Result;
-            var workId = works.LastOrDefault(w => w.WorkCode == workCode).Id;
+            Work latestWork = null;
+            if(works.Any(w => w.WorkCode == workCode)) latestWork = works.Last(w => w.WorkCode == workCode);
 
-            Spinner jobTypeSpinner = view.FindViewById<Spinner>(Resource.Id.addJobDialogJobTypeSpinner);
-            var jobType = (string)jobTypeSpinner.SelectedItem;
-            if (jobType == GetString(Resource.String.Current)) jobType = CURRENT_JOB_TYPE;
-            else if (jobType == GetString(Resource.String.Reserve)) jobType = RESERVE_JOB_TYPE;
-            Job job;
-            var jobs = (List<Job>)database.GetItems(this.Activity, JOB_TABLE_NAME).Result;
-            if (jobs.Any(j => j.Date.Date == DateTime.Now.Date && j.WorkId == workId))
+            EditText addWorkNameCodeEditText = view.FindViewById<EditText>(Resource.Id.addWorkNameCodeEditText);
+            var workName = addWorkNameCodeEditText.Text;
+
+            EditText addWorkNormCodeEditText = view.FindViewById<EditText>(Resource.Id.addWorkNormCodeEditText);
+            var workNorm = Convert.ToDouble(ChangeSymbols(addWorkNormCodeEditText.Text));
+
+            if (latestWork != null && workNorm == latestWork.Norm)
             {
-                job = jobs.First(j => j.Date.Date == DateTime.Now.Date && workId == j.WorkId);
-
-                database.UpdateItem(this.Activity, job, JOB_TABLE_NAME);
+                latestWork.Name = workName;
+                database.UpdateItem(this.Activity, latestWork, WORK_TABLE_NAME);
             }
             else
             {
-                job = new Job { };
-                database.PutItem(this.Activity, job, JOB_TABLE_NAME);
+                var work  = new Work { Name = workName, Norm = workNorm, WorkCode = workCode, AddedDate = DateTime.Now };
+                database.PutItem(this.Activity, work, WORK_TABLE_NAME);
             }
 
 

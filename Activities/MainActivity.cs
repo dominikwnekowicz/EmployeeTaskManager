@@ -21,6 +21,9 @@ namespace FakroApp.Activities
     [Activity(Label = "@string/app_name", Theme = "@style/MyTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity, IDialogInterfaceOnDismissListener
     {
+
+        const string TAG = "MainActivity";
+
         Database database;
         SupportToolbar toolbar;
         List<Job> jobs;
@@ -47,8 +50,11 @@ namespace FakroApp.Activities
             {
                 Android.Support.V4.App.FragmentTransaction transaction = SupportFragmentManager.BeginTransaction();
                 AddJobDialogFragment dialog_AddJob = new AddJobDialogFragment();
-                dialog_AddJob.Show(transaction, "dialog_fragment");
+                dialog_AddJob.Show(transaction, TAG);
             };
+
+
+            CountMonthlyNorm();
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -79,6 +85,7 @@ namespace FakroApp.Activities
             var monthlyNorm = Math.Round(monthNormsSum / dailyNorms.Count, 2);
             TextView monthNormTextView = FindViewById<TextView>(Resource.Id.monthNormTextView);
             monthNormTextView.Text = "Miesięczna norma: " + monthlyNorm + "%";
+            monthNormTextView.Visibility = Android.Views.ViewStates.Visible;
             if (monthlyNorm < 99)
             {
                 monthNormTextView.SetTextColor(Android.Graphics.Color.Red);

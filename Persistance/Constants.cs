@@ -27,5 +27,8 @@ namespace FakroApp.Persistance
         public const string LEAVE_DAYOFF_TYPE = "Leave";
         public const string UNPAIDLEAVE_DAYOFF_TYPE = "UnpaidLeave";
         public const string SICKLEAVE_DAYOFF_TYPE = "SickLeave";
+
+        //Intents Extras Names
+        public const string CHOOSEN_WORK_ID_EXTRA_NAME = "ChoosenWorkId";
     }
 }

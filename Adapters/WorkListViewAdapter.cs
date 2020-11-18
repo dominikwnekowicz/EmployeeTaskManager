@@ -9,8 +9,10 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using FakroApp.Activities;
+using FakroApp.Fragments;
 using FakroApp.Model;
-
+using static FakroApp.Persistance.Constants;
 namespace FakroApp.Adapters
 {
     class WorkListViewAdapter : BaseAdapter<Work>
@@ -43,7 +45,7 @@ namespace FakroApp.Adapters
             var work = works[position];
 
             TextView text1 = view.FindViewById<TextView>(Android.Resource.Id.Text1);
-            if(work.Name.Length > 20) text1.Text = work.Name.Substring(0, 17) + "... (" + work.WorkCode + ")";
+            if(work.Name.Length > 40) text1.Text = work.Name.Substring(0, 37) + "... (" + work.WorkCode + ")";
             else text1.Text = work.Name + " (" + work.WorkCode + ")";
 
             TextView text2 = view.FindViewById<TextView>(Android.Resource.Id.Text2);
@@ -51,7 +53,10 @@ namespace FakroApp.Adapters
 
             view.Click += (o, e) =>
             {
-
+                Intent intent = new Intent(activity, typeof(MainActivity));
+                intent.PutExtra(CHOOSEN_WORK_ID_EXTRA_NAME, work.Id);
+                activity.SetResult(Result.Ok, intent);
+                activity.Finish();
             };
 
             //fill in your items

@@ -29,6 +29,8 @@
 
         <EditText
             android:id="@+id/addWorkDialogWorkCodeEditText"
+            android:inputType="number"
+            android:digits="0123456789.,"
             android:width="200dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
