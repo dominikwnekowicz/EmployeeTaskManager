@@ -63,10 +63,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="Activities\PermissionsActivity.cs" />
     <Compile Include="Activities\WorkActivity.cs" />
-    <Compile Include="Adapters\JobListViewAdapter.cs" />
+    <Compile Include="Adapters\CurrentJobListViewAdapter.cs" />
+    <Compile Include="Adapters\ReserveJobListViewAdapter.cs" />
     <Compile Include="Adapters\WorkListViewAdapter.cs" />
     <Compile Include="Fragments\AddWorkDialogFragment.cs" />
+    <Compile Include="Fragments\ShowJobDialogFragment.cs" />
     <Compile Include="Model\DayOff.cs" />
     <Compile Include="Fragments\AddJobDialogFragment.cs" />
     <Compile Include="Model\Employee.cs" />
@@ -152,6 +155,17 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\buttonShape.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\dialog_showJob.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\buttonShapeGreen.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

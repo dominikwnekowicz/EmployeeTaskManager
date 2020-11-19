@@ -12,27 +12,26 @@
         android:textColor="@android:color/black"
         android:textSize="16dp"
         android:textAlignment="center"
-        android:text="@string/AddJob"
-        android:id="@+id/addJobDialogTitleTextView"
+        android:id="@+id/showJobDialogTitleTextView"
         android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:padding="10dp"
         android:visibility="gone"
-        android:id="@+id/addJobDialogDescriptionLinearLayout"
+        android:id="@+id/showJobDialogDescriptionLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="Opis: "
+            android:text="Minut: "
             android:textAlignment="center"
             android:width="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/addJobDialogDescriptionEditText"
+        <TextView
+            android:id="@+id/showJobDialogTimeTextView"
             android:width="200dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -42,22 +41,19 @@
     <LinearLayout
         android:orientation="horizontal"
         android:padding="10dp"
-        android:id="@+id/addJobDialogWorkIdLinearLayout"
+        android:id="@+id/showJobDialogWorkIdLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:text="Robota: "
             android:textAlignment="center"
-            android:id="@+id/addJobDialogChooseWorkTextView"
             android:width="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <Button
-            android:id="@+id/addJobDialogChooseWorkButton"
-            android:text="@string/Choose"
-            style="@style/ButtonStyle"
+        <TextView
+            android:id="@+id/showJobDialogChooseWorkTextView"
             android:width="200dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -66,7 +62,7 @@
         
         <LinearLayout
         android:padding="10dp"
-        android:id="@+id/addJobDialogQuantityLinearLayout"
+        android:id="@+id/showJobDialogQuantityLinearLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -79,43 +75,16 @@
             android:layout_height="75dp"
             android:gravity="center" />
 
-        <NumberPicker
-            android:id="@+id/addJobDialogQuantityNumberPicker"
+        <TextView
+            android:id="@+id/showJobDialogQuantityTextView"
             android:width="200dp"
             android:layout_width="match_parent"
             android:layout_height="75dp"/>
 
     </LinearLayout>
-
-    
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:visibility="gone"
-        android:id="@+id/addJobDialogTimeLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:text="Minut: "
-            android:textAlignment="center"
-            android:width="100dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/addJobDialogTimeEditText"
-            android:inputType="number"
-            android:digits="0123456789.,"
-            android:width="200dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
         
         <LinearLayout
-        android:id="@+id/addJobDialogJobTypeLinearLayout"
+        android:id="@+id/showJobDialogJobTypeLinearLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:padding="10dp"
@@ -128,21 +97,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <Spinner
-            android:entries="@array/jobTypes_DropdownArray"
+        <TextView
             android:width="200dp"
-            android:id="@+id/addJobDialogJobTypeSpinner"
+            android:id="@+id/showJobDialogJobTypeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
-    <CheckBox
+    <TextView
         android:text="@string/IsNormalized"
-        android:checked="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/addJobDialogIsNormalizedCheckBox"
+        android:id="@+id/showJobDialogIsNormalizedTextView"
         android:layout_gravity="center_horizontal"
     />
 
@@ -153,16 +120,25 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/addJobDialogCancelButton"
-            android:text="@string/Cancel"
+            android:id="@+id/showJobDialogCloseButton"
+            android:text="@string/Close"
             style="@style/ButtonStyle"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <Button
-            android:id="@+id/addJobDialogAddButton"
+            android:id="@+id/showJobDialogEditButton"
+            android:text="@string/Edit"
+            style="@style/ButtonStyle"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/showJobDialogAddButton"
             android:text="@string/Add"
+            android:background="@drawable/buttonShapeGreen"
             style="@style/ButtonStyle"
             android:layout_weight="1"
             android:layout_width="wrap_content"

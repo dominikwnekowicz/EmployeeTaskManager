@@ -31,6 +31,8 @@ namespace FakroApp.Model
 
         public string Description { get; set; }
 
+        public double? Time { get; set; }
+
         public int? WorkId { get; set; }
 
         [NotNull]

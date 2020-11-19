@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -20,14 +21,16 @@ namespace FakroApp.Fragments
     class AddJobDialogFragment : Android.Support.V4.App.DialogFragment
     {
         View view;
-        NumberPicker quantityNumberPicker;
+        NumberPicker addJobDialogQuantityNumberPicker;
         Database database;
         Work choosenWork;
         List<Work> works;
         Button addJobDialogChooseWorkButton;
         TextView addJobDialogTitleTextView;
-        CheckBox addJobDialogIsNotNormalizedCheckBox;
-        bool isNormalized;
+        EditText addJobDialogTimeEditText;
+        CheckBox addJobDialogIsNormalizedCheckBox;
+        Spinner addJobDialogJobTypeSpinner;
+        bool isNormalized = true;
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
@@ -36,23 +39,25 @@ namespace FakroApp.Fragments
 
             database = new Database();
 
-            var addJobDialogButton = view.FindViewById<Button>(Resource.Id.addJobDialogAddButton);
-            addJobDialogButton.Click += AddJobDialogButton_Click;
+            var addJobDialogAddButton = view.FindViewById<Button>(Resource.Id.addJobDialogAddButton);
+            addJobDialogAddButton.Click += AddJobDialogAddButton_Click;
 
             addJobDialogTitleTextView = view.FindViewById<TextView>(Resource.Id.addJobDialogTitleTextView);
 
-            Spinner jobTypeSpinner = view.FindViewById<Spinner>(Resource.Id.addJobDialogJobTypeSpinner);
+            addJobDialogTimeEditText = view.FindViewById<EditText>(Resource.Id.addJobDialogTimeEditText);
 
-            var cancelAddJobDialogButton = view.FindViewById<Button>(Resource.Id.addJobDialogCancelButton);
-            cancelAddJobDialogButton.Click += CancelAddJobDialogButton_Click;
+            addJobDialogJobTypeSpinner = view.FindViewById<Spinner>(Resource.Id.addJobDialogJobTypeSpinner);
 
-            addJobDialogIsNotNormalizedCheckBox = view.FindViewById<CheckBox>(Resource.Id.addJobDialogIsNotNormalizedCheckBox);
-            addJobDialogIsNotNormalizedCheckBox.CheckedChange += AddJobDialogIsNotNormalizedCheckBox_CheckedChange;
+            var addJobDialogCancelButton = view.FindViewById<Button>(Resource.Id.addJobDialogCancelButton);
+            addJobDialogCancelButton.Click += AddJobDialogCancelButton_Click;
 
-            quantityNumberPicker = view.FindViewById<NumberPicker>(Resource.Id.addJobDialogQuantityNumberPicker);
-            quantityNumberPicker.MaxValue = 9999;
-            quantityNumberPicker.MinValue = 1;
-            quantityNumberPicker.WrapSelectorWheel = false;
+            addJobDialogIsNormalizedCheckBox = view.FindViewById<CheckBox>(Resource.Id.addJobDialogIsNormalizedCheckBox);
+            addJobDialogIsNormalizedCheckBox.CheckedChange += AddJobDialogIsNormalizedCheckBox_CheckedChange;
+
+            addJobDialogQuantityNumberPicker = view.FindViewById<NumberPicker>(Resource.Id.addJobDialogQuantityNumberPicker);
+            addJobDialogQuantityNumberPicker.MaxValue = 9999;
+            addJobDialogQuantityNumberPicker.MinValue = 1;
+            addJobDialogQuantityNumberPicker.WrapSelectorWheel = false;
 
             addJobDialogChooseWorkButton = view.FindViewById<Button>(Resource.Id.addJobDialogChooseWorkButton);
             addJobDialogChooseWorkButton.Click += AddJobDialogChooseWorkButton_Click;
@@ -61,25 +66,28 @@ namespace FakroApp.Fragments
             return view;
         }
 
-        private void AddJobDialogIsNotNormalizedCheckBox_CheckedChange(object sender, CompoundButton.CheckedChangeEventArgs e)
+        private void AddJobDialogIsNormalizedCheckBox_CheckedChange(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
             isNormalized = e.IsChecked;
             LinearLayout addJobDialogDescriptionLinearLayout = view.FindViewById<LinearLayout>(Resource.Id.addJobDialogDescriptionLinearLayout);
             LinearLayout addJobDialogWorkIdLinearLayout = view.FindViewById<LinearLayout>(Resource.Id.addJobDialogWorkIdLinearLayout);
+            LinearLayout addJobDialogTimeLinearLayout = view.FindViewById<LinearLayout>(Resource.Id.addJobDialogTimeLinearLayout);
             if (isNormalized == true)
             {
-                addJobDialogTitleTextView.Text = GetString(Resource.String.AddJob);
-                addJobDialogTitleTextView.SetTextColor(Android.Graphics.Color.Black);
-                addJobDialogIsNotNormalizedCheckBox.SetTextColor(new Android.Graphics.Color(ContextCompat.GetColor(this.Activity, Resource.Color.colorAccent)));
-                addJobDialogDescriptionLinearLayout.Visibility = ViewStates.Visible;
-                addJobDialogWorkIdLinearLayout.Visibility = ViewStates.Gone;
-            }
-            else
-            {
-                addJobDialogIsNotNormalizedCheckBox.SetTextColor(Android.Graphics.Color.Black);
+                addJobDialogIsNormalizedCheckBox.SetTextColor(Android.Graphics.Color.Black);
                 addJobDialogChooseWorkButton.Text = GetString(Resource.String.Choose);
                 addJobDialogDescriptionLinearLayout.Visibility = ViewStates.Gone;
                 addJobDialogWorkIdLinearLayout.Visibility = ViewStates.Visible;
+                addJobDialogTimeLinearLayout.Visibility = ViewStates.Gone;
+            }
+            else
+            {
+                addJobDialogTitleTextView.Text = GetString(Resource.String.AddJob);
+                addJobDialogTitleTextView.SetTextColor(Android.Graphics.Color.Black);
+                addJobDialogIsNormalizedCheckBox.SetTextColor(new Android.Graphics.Color(ContextCompat.GetColor(this.Activity, Resource.Color.colorAccent)));
+                addJobDialogDescriptionLinearLayout.Visibility = ViewStates.Visible;
+                addJobDialogWorkIdLinearLayout.Visibility = ViewStates.Gone;
+                addJobDialogTimeLinearLayout.Visibility = ViewStates.Visible;
             }
         }
 
@@ -89,40 +97,53 @@ namespace FakroApp.Fragments
             StartActivityForResult(intent, 0);
         }
 
-        private void CancelAddJobDialogButton_Click(object sender, EventArgs e)
+        private void AddJobDialogCancelButton_Click(object sender, EventArgs e)
         {
             Dismiss();
         }
 
-        private void AddJobDialogButton_Click(object sender, EventArgs e)
+
+        private string ChangeSymbols(string text)
+        {
+            foreach (var character in text)
+            {
+                if (!Char.IsNumber(character) && character != '.') text = text.Replace(character, '.');
+            }
+            return text;
+        }
+        private void AddJobDialogAddButton_Click(object sender, EventArgs e)
         {
 
             EditText addJobDialogDescriptionEditText = view.FindViewById<EditText>(Resource.Id.addJobDialogDescriptionEditText);
             var description = addJobDialogDescriptionEditText.Text;
 
-            if (choosenWork != null || (isNormalized && !String.IsNullOrWhiteSpace(description)))
+            if (choosenWork != null || (!isNormalized && !String.IsNullOrWhiteSpace(description)))
             {
                 Database database = new Database();
                 int? workId = null;
                 if(choosenWork != null) workId = choosenWork.Id;
-                var quantity = quantityNumberPicker.Value;
-                Spinner jobTypeSpinner = view.FindViewById<Spinner>(Resource.Id.addJobDialogJobTypeSpinner);
-                var jobType = (string)jobTypeSpinner.SelectedItem;
+                var quantity = addJobDialogQuantityNumberPicker.Value;
+                addJobDialogJobTypeSpinner = view.FindViewById<Spinner>(Resource.Id.addJobDialogJobTypeSpinner);
+                var jobType = (string)addJobDialogJobTypeSpinner.SelectedItem;
                 if (jobType == GetString(Resource.String.Current)) jobType = CURRENT_JOB_TYPE;
                 else if (jobType == GetString(Resource.String.Reserve)) jobType = RESERVE_JOB_TYPE;
+                double? time = null;
+
+                if (!String.IsNullOrWhiteSpace(addJobDialogTimeEditText.Text)) time = Convert.ToDouble(ChangeSymbols(addJobDialogTimeEditText.Text), CultureInfo.InvariantCulture);
 
                 Job job;
                 var jobs = (List<Job>)database.GetItems(this.Activity, JOB_TABLE_NAME).Result;
-                if (jobs.Any(j => j.Date.Date == DateTime.Now.Date && (j.WorkId == workId)))
+                if (jobs.Any(j => j.Date.Date == DateTime.Now.Date && (j.WorkId == workId) && j.Type == jobType))
                 {
                     job = jobs.First(j => j.Date.Date == DateTime.Now.Date && workId == j.WorkId);
                     job.Quantity += quantity;
+                    job.Time = time;
 
                     database.UpdateItem(this.Activity, job, JOB_TABLE_NAME);
                 }
                 else
                 {
-                    job = new Job { Date = DateTime.Now, Quantity = quantity, WorkId = workId, Type = jobType, Description = description, IsNormalized = isNormalized };
+                    job = new Job { Date = DateTime.Now, Quantity = quantity, WorkId = workId, Type = jobType, Description = description, IsNormalized = isNormalized, Time = time };
                     database.PutItem(this.Activity, job, JOB_TABLE_NAME);
                 }
 

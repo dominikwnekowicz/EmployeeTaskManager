@@ -9,13 +9,15 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using FakroApp.Fragments;
 using FakroApp.Model;
 using FakroApp.Persistance;
 using static FakroApp.Persistance.Constants;
+using FakroApp.Activities;
 
 namespace FakroApp.Adapters
 {
-    class JobListViewAdapter : BaseAdapter<Job>
+    class ReserveJobListViewAdapter : BaseAdapter<Job>
     {
 
         private Activity activity;
@@ -23,7 +25,7 @@ namespace FakroApp.Adapters
         private List<Work> works;
         private Database database;
 
-        public JobListViewAdapter(Activity activity, List<Job> jobs)
+        public ReserveJobListViewAdapter(Activity activity, List<Job> jobs)
         {
             this.activity = activity;
             this.jobs = jobs;
@@ -49,34 +51,27 @@ namespace FakroApp.Adapters
             var job = jobs[position];
             var work = works.FirstOrDefault(w => w.Id == job.WorkId);
 
-            if (position == 0 || job.Date.Date != jobs[position-1].Date.Date)
-            {
-                TextView jobDateTextView = view.FindViewById<TextView>(Resource.Id.jobDateTextView);
-                jobDateTextView.Text = job.Date.Date.ToString("dd-MM-yyyy");
-                jobDateTextView.Visibility = ViewStates.Visible;
-
-                View jobDateDividerView = view.FindViewById<View>(Resource.Id.jobDateDividerView);
-                jobDateDividerView.Visibility = ViewStates.Visible;
-                double sum = 0;
-                foreach(var item in jobs)
-                {
-                    if (item.Date.Date == job.Date.Date) sum += (works.FirstOrDefault(w => w.Id == item.WorkId).Norm * item.Quantity);
-                }
-                if(Math.Round(sum, 2)/60 < 7.66)
-                {
-                    jobDateTextView.SetTextColor(Android.Graphics.Color.Rgb(255, 0, 0));
-                    jobDateTextView.Text += " (" + Math.Round((sum + 20) / 4.80, 2) + "%)";
-                    jobDateDividerView.SetBackgroundColor(Android.Graphics.Color.Rgb(255, 0, 0));
-                }
-            }
-
             TextView jobNameTextView = view.FindViewById<TextView>(Resource.Id.jobNameTextView);
-            var text = job.Quantity + "x " + work.Name;
+            string text = job.Quantity + "x ";
+            if (job.IsNormalized) text += work.Name;
+            else text += job.Description;
+
             if (text.Length > 35) text = text.Substring(0, 32) + "...";
             jobNameTextView.Text = text;
 
             TextView jobTimeTextView = view.FindViewById<TextView>(Resource.Id.jobTimeTextView);
-            jobTimeTextView.Text = Math.Round((work.Norm * job.Quantity) / 60, 2).ToString() + "h";
+            if (job.IsNormalized) jobTimeTextView.Text = Math.Round((work.Norm * job.Quantity) / 60, 2).ToString() + "h";
+            else jobTimeTextView.Text = Math.Round(job.Time.Value / 60, 2).ToString() + "h";
+
+            view.Click += (o, e) =>
+            {
+                var dialog_ShowJob = new ShowJobDialogFragment();
+                Bundle args = new Bundle();
+                args.PutInt(CHOOSEN_JOB_ID_EXTRA_NAME, job.Id);
+                dialog_ShowJob.Arguments = args;
+                var fragmentTransaction = ((MainActivity)activity).SupportFragmentManager.BeginTransaction();
+                dialog_ShowJob.Show(fragmentTransaction, ((MainActivity)activity).TAG);
+            };
 
             return view;
         }
@@ -99,7 +94,7 @@ namespace FakroApp.Adapters
         }
     }
 
-    class JobAdapterViewHolder : Java.Lang.Object
+    class ReserveJobAdapterViewHolder : Java.Lang.Object
     {
         //Your adapter views to re-use
         //public TextView Title { get; set; }

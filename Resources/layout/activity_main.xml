@@ -14,13 +14,46 @@
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark" />
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/mainTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        android:layout_below="@id/mainToolbar"
+        app:tabSelectedTextColor="@color/colorButtonNormal"
+        app:tabTextColor="#000000"
+        android:background="@android:color/white">
+
+        <android.support.design.widget.TabItem
+            android:text="@string/Current"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <android.support.design.widget.TabItem
+            android:text="@string/Reserve"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </android.support.design.widget.TabLayout>
 
     <ListView
         android:listSelector="@android:color/transparent"
         android:stackFromBottom="true"
-        android:layout_below="@id/mainToolbar"
+        android:layout_below="@id/mainTabLayout"
         android:layout_above="@id/jobsBottomLinearLayout"
-        android:id="@+id/jobsListView"
+        android:id="@+id/currentJobsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ListView
+        android:listSelector="@android:color/transparent"
+        android:visibility="gone"
+        android:layout_below="@id/mainTabLayout"
+        android:layout_above="@id/jobsBottomLinearLayout"
+        android:id="@+id/reserveJobsListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -52,7 +85,7 @@
     <LinearLayout
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:orientation="horizontal"
         >
         <ImageButton

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -44,7 +45,10 @@ namespace FakroApp.Fragments
         {
             foreach(var character in text)
             {
-                if (!Char.IsDigit(character) && character != ',') text = text.Replace(character, ',');
+                if (!Char.IsNumber(character) && character != '.')
+                {
+                    text = text.Replace(character, '.');
+                }
             }
             return text;
         }
@@ -63,7 +67,8 @@ namespace FakroApp.Fragments
             var workName = addWorkNameCodeEditText.Text;
 
             EditText addWorkNormCodeEditText = view.FindViewById<EditText>(Resource.Id.addWorkNormCodeEditText);
-            var workNorm = Convert.ToDouble(ChangeSymbols(addWorkNormCodeEditText.Text));
+            var workNormText = ChangeSymbols(addWorkNormCodeEditText.Text);
+            double workNorm = Convert.ToDouble(workNormText, CultureInfo.InvariantCulture);
 
             if (latestWork != null && workNorm == latestWork.Norm)
             {

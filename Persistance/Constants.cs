@@ -30,5 +30,6 @@ namespace FakroApp.Persistance
 
         //Intents Extras Names
         public const string CHOOSEN_WORK_ID_EXTRA_NAME = "ChoosenWorkId";
+        public const string CHOOSEN_JOB_ID_EXTRA_NAME = "ChoosenJobId";
     }
 }
