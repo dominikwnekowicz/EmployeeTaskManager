@@ -19,6 +19,8 @@
   <!--Texts-->
   <string name="Cancel">Anuluj</string>
   <string name="Add">Dodaj</string>
+  <string name="Save">Zapisz</string>
+  <string name="Delete">Usuń</string>
   <string name="Ok">Zatwierdź</string>
   <string name="IsNormalized">Normowane</string>
   <string name="Choose">Wybierz</string>

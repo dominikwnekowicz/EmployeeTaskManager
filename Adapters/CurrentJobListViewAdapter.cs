@@ -53,25 +53,39 @@ namespace FakroApp.Adapters
 
             if (position == 0 || job.Date.Date != jobs[position-1].Date.Date)
             {
+                double dayTime = 0;
+                foreach (var item in jobs)
+                {
+                    if (item.Date.Date == job.Date.Date)
+                    {
+                        if (item.IsNormalized) dayTime += (works.FirstOrDefault(w => w.Id == item.WorkId).Norm * item.Quantity);
+                        else dayTime += item.Time.Value;
+                    }
+                }
+                var dayPercents = dayTime / 4.60;
+
                 TextView jobDateTextView = view.FindViewById<TextView>(Resource.Id.jobDateTextView);
                 jobDateTextView.Text = job.Date.Date.ToString("dd-MM-yyyy");
                 jobDateTextView.Visibility = ViewStates.Visible;
 
+                TextView jobDayTimeTextView = view.FindViewById<TextView>(Resource.Id.jobDayTimeTextView);
+                jobDayTimeTextView.Text = Math.Round((dayTime), 2).ToString();
+                jobDayTimeTextView.Visibility = ViewStates.Visible;
+
+                TextView jobDayPercentsTextView = view.FindViewById<TextView>(Resource.Id.jobDayPercentsTextView);
+                jobDayPercentsTextView.Text = Math.Round((dayPercents), 2).ToString();
+                jobDayPercentsTextView.Visibility = ViewStates.Visible;
+
                 View jobDateDividerView = view.FindViewById<View>(Resource.Id.jobDateDividerView);
                 jobDateDividerView.Visibility = ViewStates.Visible;
-                double sum = 0;
-                foreach(var item in jobs)
-                {
-                    if (item.Date.Date == job.Date.Date)
-                    {
-                        if (item.IsNormalized) sum += (works.FirstOrDefault(w => w.Id == item.WorkId).Norm * item.Quantity);
-                        else sum += item.Time.Value;
-                    }
-                }
-                if(Math.Round(sum, 2)/60 < 7.66)
+                if(dayTime < 460)
                 {
                     jobDateTextView.SetTextColor(Android.Graphics.Color.Rgb(255, 0, 0));
-                    jobDateTextView.Text += " (" + Math.Round((sum + 20) / 4.80, 2) + "%)";
+
+                    jobDayTimeTextView.SetTextColor(Android.Graphics.Color.Rgb(255, 0, 0));
+
+                    jobDayPercentsTextView.SetTextColor(Android.Graphics.Color.Rgb(255, 0, 0));
+
                     jobDateDividerView.SetBackgroundColor(Android.Graphics.Color.Rgb(255, 0, 0));
                 }
             }

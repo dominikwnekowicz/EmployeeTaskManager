@@ -136,6 +136,15 @@
             android:layout_height="wrap_content"/>
 
         <Button
+            android:id="@+id/showJobDialogDeleteButton"
+            android:text="@string/Delete"
+            android:background="@drawable/buttonShapeRed"
+            style="@style/ButtonStyle"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
             android:id="@+id/showJobDialogAddButton"
             android:text="@string/Add"
             android:background="@drawable/buttonShapeGreen"

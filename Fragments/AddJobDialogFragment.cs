@@ -30,6 +30,8 @@ namespace FakroApp.Fragments
         EditText addJobDialogTimeEditText;
         CheckBox addJobDialogIsNormalizedCheckBox;
         Spinner addJobDialogJobTypeSpinner;
+
+        Job job;
         bool isNormalized = true;
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -46,6 +48,8 @@ namespace FakroApp.Fragments
 
             addJobDialogTimeEditText = view.FindViewById<EditText>(Resource.Id.addJobDialogTimeEditText);
 
+            EditText addJobDialogDescriptionEditText = view.FindViewById<EditText>(Resource.Id.addJobDialogDescriptionEditText);
+
             addJobDialogJobTypeSpinner = view.FindViewById<Spinner>(Resource.Id.addJobDialogJobTypeSpinner);
 
             var addJobDialogCancelButton = view.FindViewById<Button>(Resource.Id.addJobDialogCancelButton);
@@ -61,8 +65,33 @@ namespace FakroApp.Fragments
 
             addJobDialogChooseWorkButton = view.FindViewById<Button>(Resource.Id.addJobDialogChooseWorkButton);
             addJobDialogChooseWorkButton.Click += AddJobDialogChooseWorkButton_Click;
+            
+            if(Arguments != null)
+            {
+                int jobId = Arguments.GetInt(CHOOSEN_JOB_ID_EXTRA_NAME);
+                addJobDialogAddButton.Text = GetString(Resource.String.Save);
+                var jobs = (List<Job>)database.GetItems(this.Activity, JOB_TABLE_NAME).Result;
+                job = jobs.FirstOrDefault(j => j.Id == jobId);
+                SelectWork(job.WorkId);
 
+                if (job.Type == CURRENT_JOB_TYPE)
+                {
+                    addJobDialogJobTypeSpinner.SetSelection(0);
+                }
+                else if (job.Type == RESERVE_JOB_TYPE)
+                {
+                    addJobDialogJobTypeSpinner.SetSelection(1);
+                }
 
+                addJobDialogQuantityNumberPicker.Value = job.Quantity;
+
+                addJobDialogDescriptionEditText.Text = job.Description;
+
+                var isNormalized = job.IsNormalized;
+
+                if(job.Time.HasValue) addJobDialogTimeEditText.Text = job.Time.Value.ToString(); ;
+            }
+            
             return view;
         }
 
@@ -119,9 +148,8 @@ namespace FakroApp.Fragments
 
             if (choosenWork != null || (!isNormalized && !String.IsNullOrWhiteSpace(description)))
             {
-                Database database = new Database();
                 int? workId = null;
-                if(choosenWork != null) workId = choosenWork.Id;
+                if(choosenWork != null || (job != null && job.WorkId != choosenWork.Id)) workId = choosenWork.Id;
                 var quantity = addJobDialogQuantityNumberPicker.Value;
                 addJobDialogJobTypeSpinner = view.FindViewById<Spinner>(Resource.Id.addJobDialogJobTypeSpinner);
                 var jobType = (string)addJobDialogJobTypeSpinner.SelectedItem;
@@ -131,13 +159,20 @@ namespace FakroApp.Fragments
 
                 if (!String.IsNullOrWhiteSpace(addJobDialogTimeEditText.Text)) time = Convert.ToDouble(ChangeSymbols(addJobDialogTimeEditText.Text), CultureInfo.InvariantCulture);
 
-                Job job;
                 var jobs = (List<Job>)database.GetItems(this.Activity, JOB_TABLE_NAME).Result;
-                if (jobs.Any(j => j.Date.Date == DateTime.Now.Date && (j.WorkId == workId) && j.Type == jobType))
+                if ((jobType == CURRENT_JOB_TYPE && jobs.Any(j => j.Date.Date == DateTime.Now.Date && (j.WorkId == workId) && j.Type == jobType)) || jobType == RESERVE_JOB_TYPE && jobs.Any(j => j.WorkId == workId && j.Type == jobType))
                 {
-                    job = jobs.First(j => j.Date.Date == DateTime.Now.Date && workId == j.WorkId);
-                    job.Quantity += quantity;
+                    if (job == null)
+                    {
+                        if(jobType == CURRENT_JOB_TYPE) job = jobs.First(j => j.Date.Date == DateTime.Now.Date && workId == j.WorkId && j.Type == jobType);
+                        else job = jobs.First(j => workId == j.WorkId && j.Type == jobType);
+                        job.Quantity += quantity;
+                    }
+                    else job.Quantity = quantity;
                     job.Time = time;
+                    job.IsNormalized = isNormalized;
+                    job.Type = jobType;
+                    job.WorkId = workId;
 
                     database.UpdateItem(this.Activity, job, JOB_TABLE_NAME);
                 }
@@ -152,6 +187,15 @@ namespace FakroApp.Fragments
             }
         }
 
+        private void SelectWork(int? choosenWorkId)
+        {
+            works = (List<Work>)database.GetItems(this.Activity, WORK_TABLE_NAME).Result;
+            choosenWork = works.Last(w => w.Id == choosenWorkId);
+            addJobDialogTitleTextView.Text = choosenWork.Name;
+            addJobDialogTitleTextView.SetTextColor(new Android.Graphics.Color(ContextCompat.GetColor(this.Activity, Resource.Color.colorPrimaryDark)));
+            addJobDialogChooseWorkButton.Text = GetString(Resource.String.Change);
+        }
+
         public override void OnActivityResult(int requestCode, int resultCode, Intent data)
         {
             switch(requestCode)
@@ -160,11 +204,7 @@ namespace FakroApp.Fragments
                     if(resultCode == -1)//Result.Ok
                     {
                         var choosenWorkId = data.GetIntExtra(CHOOSEN_WORK_ID_EXTRA_NAME, 0);
-                        works = (List<Work>)database.GetItems(this.Activity, WORK_TABLE_NAME).Result;
-                        choosenWork = works.Last(w => w.Id == choosenWorkId);
-                        addJobDialogTitleTextView.Text = choosenWork.Name;
-                        addJobDialogTitleTextView.SetTextColor(new Android.Graphics.Color(ContextCompat.GetColor(this.Activity, Resource.Color.colorPrimaryDark)));
-                        addJobDialogChooseWorkButton.Text = GetString(Resource.String.Change);
+                        SelectWork(choosenWorkId);
                     }
                     return;
             }

@@ -91,9 +91,9 @@ namespace FakroApp.Activities
                     monthNormTextView.Text = "Norma zrobiona";
                     monthNormTextView.SetTextColor(new Android.Graphics.Color(ContextCompat.GetColor(this, Resource.Color.colorAccent)));
                 }
-                monthNormTextView.Visibility = Android.Views.ViewStates.Visible;
+                monthNormTextView.Visibility = ViewStates.Visible;
 
-                if (minutesDailyDeficit == 480) monthNormTextView.Visibility = Android.Views.ViewStates.Gone;
+                if (minutesDailyDeficit == 480) monthNormTextView.Visibility = ViewStates.Gone;
             }
         }
 
@@ -153,7 +153,7 @@ namespace FakroApp.Activities
             var monthlyNorm = Math.Round(monthNormsSum / dailyNorms.Count, 2);
             TextView monthNormTextView = FindViewById<TextView>(Resource.Id.monthNormTextView);
             monthNormTextView.Text = "Miesięczna norma: " + monthlyNorm + "%";
-            monthNormTextView.Visibility = Android.Views.ViewStates.Visible;
+            monthNormTextView.Visibility = ViewStates.Visible;
             if (monthlyNorm < 99)
             {
                 monthNormTextView.SetTextColor(Android.Graphics.Color.Red);
