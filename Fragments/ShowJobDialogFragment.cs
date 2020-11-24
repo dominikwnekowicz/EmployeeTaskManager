@@ -7,9 +7,12 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V4.Content;
+using Android.Support.V4.Content.Res;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using FakroApp.Activities;
 using FakroApp.Model;
 using FakroApp.Persistance;
 using static FakroApp.Persistance.Constants;
@@ -28,9 +31,10 @@ namespace FakroApp.Fragments
         TextView showJobDialogTitleTextView;
         TextView showJobDialogIsNormalizedTextView;
         TextView showJobDialogTimeTextView;
-        TextView showJobDialogJobTypeTextView;
         TextView showJobDialogQuantityTextView;
-
+        NumberPicker showJobDialogAddQuantityNumberPicker;
+        List<Job> jobs;
+        int needToday = 0;
         private Job job;
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -39,6 +43,10 @@ namespace FakroApp.Fragments
             view = inflater.Inflate(Resource.Layout.dialog_showJob, container, false);
 
             database = new Database();
+
+            int jobId = Arguments.GetInt(CHOOSEN_JOB_ID_EXTRA_NAME);
+            jobs = (List<Job>)database.GetItems(this.Activity, JOB_TABLE_NAME).Result;
+            job = jobs.FirstOrDefault(j => j.Id == jobId);
 
             var showJobDialogEditButton = view.FindViewById<Button>(Resource.Id.showJobDialogEditButton);
             showJobDialogEditButton.Click += ShowJobDialogEditButton_Click;
@@ -56,9 +64,9 @@ namespace FakroApp.Fragments
 
             showJobDialogTitleTextView = view.FindViewById<TextView>(Resource.Id.showJobDialogTitleTextView);
 
-            showJobDialogJobTypeTextView = view.FindViewById<TextView>(Resource.Id.showJobDialogJobTypeTextView);
-
             showJobDialogIsNormalizedTextView = view.FindViewById<TextView>(Resource.Id.showJobDialogIsNormalizedTextView);
+
+            var showJobDialogNeedTodayTextView = view.FindViewById<TextView>(Resource.Id.showJobDialogNeedTodayTextView);
 
             showJobDialogTimeTextView = view.FindViewById<TextView>(Resource.Id.showJobDialogTimeTextView);
 
@@ -66,24 +74,52 @@ namespace FakroApp.Fragments
 
             showJobDialogChooseWorkTextView = view.FindViewById<TextView>(Resource.Id.showJobDialogChooseWorkTextView);
 
-            int jobId = Arguments.GetInt(CHOOSEN_JOB_ID_EXTRA_NAME);
-            var jobs = (List<Job>)database.GetItems(this.Activity, JOB_TABLE_NAME).Result;
-            job = jobs.FirstOrDefault(j => j.Id == jobId);
+            showJobDialogAddQuantityNumberPicker = view.FindViewById<NumberPicker>(Resource.Id.showJobDialogAddQuantityNumberPicker);
+            showJobDialogAddQuantityNumberPicker.MaxValue = job.Quantity;
+            showJobDialogAddQuantityNumberPicker.MinValue = 1;
+            showJobDialogAddQuantityNumberPicker.WrapSelectorWheel = false;
+            showJobDialogAddQuantityNumberPicker.ValueChanged += ShowJobDialogAddQuantityNumberPicker_ValueChanged;
 
             works = (List<Work>)database.GetItems(this.Activity, WORK_TABLE_NAME).Result;
             choosenWork = works.FirstOrDefault(w => w.Id == job.WorkId);
+            LinearLayout showJobDialogAddQuantityLinearLayout = view.FindViewById<LinearLayout>(Resource.Id.showJobDialogAddQuantityLinearLayout);
+            LinearLayout showJobDialogIsNormalizedLinearLayout = view.FindViewById<LinearLayout>(Resource.Id.showJobDialogIsNormalizedLinearLayout);
+            LinearLayout showJobDialogNeedTodayLinearLayout = view.FindViewById<LinearLayout>(Resource.Id.showJobDialogNeedTodayLinearLayout);
 
             if (job.Type == CURRENT_JOB_TYPE)
             {
-                showJobDialogJobTypeTextView.Text = GetString(Resource.String.Current);
                 showJobDialogAddButton.Visibility = ViewStates.Gone;
+                showJobDialogAddQuantityLinearLayout.Visibility = ViewStates.Gone;
+                showJobDialogNeedTodayLinearLayout.Visibility = ViewStates.Gone;
                 showJobDialogEditButton.Visibility = ViewStates.Visible;
+                showJobDialogIsNormalizedLinearLayout.Visibility = ViewStates.Visible;
             }
             else if (job.Type == RESERVE_JOB_TYPE)
             {
-                showJobDialogJobTypeTextView.Text = GetString(Resource.String.Reserve);
+                var dailyTime = DataManager.GetDailyMinutes(this.Activity);
+                needToday = Convert.ToInt32(Math.Ceiling((460 - dailyTime) / choosenWork.Norm));
+                if (dailyTime < 460)
+                {
+                    if (needToday <= job.Quantity) showJobDialogAddQuantityNumberPicker.Value = Convert.ToInt32(Math.Ceiling((460 - dailyTime) / choosenWork.Norm));
+                    else
+                    {
+                        showJobDialogAddQuantityNumberPicker.Value = job.Quantity;
+                    }
+                    showJobDialogNeedTodayTextView.Text = needToday.ToString();
+                }
+                else
+                {
+                    showJobDialogNeedTodayTextView.Text = "0";
+                }
+
+                if (showJobDialogAddQuantityNumberPicker.MaxValue < needToday) showJobDialogAddQuantityNumberPicker.SetBackgroundResource(Resource.Drawable.numberPickerShapeTransparentRed);
+                else showJobDialogAddQuantityNumberPicker.SetBackgroundResource(Resource.Drawable.numberPickerShapeTransparentGreen);
+
                 showJobDialogAddButton.Visibility = ViewStates.Visible;
+                showJobDialogAddQuantityLinearLayout.Visibility = ViewStates.Visible;
+                showJobDialogNeedTodayLinearLayout.Visibility = ViewStates.Visible;
                 showJobDialogEditButton.Visibility = ViewStates.Gone;
+                showJobDialogIsNormalizedLinearLayout.Visibility = ViewStates.Gone;
             }
 
             showJobDialogQuantityTextView.Text = job.Quantity.ToString();
@@ -94,7 +130,7 @@ namespace FakroApp.Fragments
             if (isNormalized == true)
             {
                 showJobDialogChooseWorkTextView.Text = choosenWork.WorkCode;
-                showJobDialogIsNormalizedTextView.Text = GetString(Resource.String.IsNormalized) + ": " + GetString(Resource.String.Yes);
+                showJobDialogIsNormalizedTextView.Text = GetString(Resource.String.Yes);
                 showJobDialogTitleTextView.Text = choosenWork.Name;
                 showJobDialogDescriptionLinearLayout.Visibility = ViewStates.Gone;
                 showJobDialogWorkIdLinearLayout.Visibility = ViewStates.Visible;
@@ -102,7 +138,7 @@ namespace FakroApp.Fragments
             else
             {
                 showJobDialogTimeTextView.Text = job.Time.Value.ToString();
-                showJobDialogIsNormalizedTextView.Text = GetString(Resource.String.IsNormalized) + ": " + GetString(Resource.String.No);
+                showJobDialogIsNormalizedTextView.Text = GetString(Resource.String.No);
                 showJobDialogTitleTextView.Text = job.Description;
                 showJobDialogDescriptionLinearLayout.Visibility = ViewStates.Visible;
                 showJobDialogWorkIdLinearLayout.Visibility = ViewStates.Gone;
@@ -111,9 +147,37 @@ namespace FakroApp.Fragments
             return view;
         }
 
+        private void ShowJobDialogAddQuantityNumberPicker_ValueChanged(object sender, NumberPicker.ValueChangeEventArgs e)
+        {
+            if (e.NewVal < needToday) showJobDialogAddQuantityNumberPicker.SetBackgroundResource(Resource.Drawable.numberPickerShapeTransparentRed);
+            else showJobDialogAddQuantityNumberPicker.SetBackgroundResource(Resource.Drawable.numberPickerShapeTransparentGreen);
+        }
+
         private void ShowJobDialogAddButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            var addJob = new Job { Date = DateTime.Now, Quantity = showJobDialogAddQuantityNumberPicker.Value, WorkId = job.WorkId, Type = CURRENT_JOB_TYPE, Description = job.Description, IsNormalized = job.IsNormalized, Time = job.Time };
+            if (addJob.Quantity == job.Quantity) database.DeleteItem(this.Activity, job, JOB_TABLE_NAME);
+            else
+            {
+                job.Quantity = job.Quantity - addJob.Quantity;
+                database.UpdateItem(this.Activity, job, JOB_TABLE_NAME);
+            }
+            if (jobs.Any(j => j.Date.Date == DateTime.Now.Date && (j.WorkId == addJob.WorkId) && j.Type == CURRENT_JOB_TYPE))
+            {
+                var existingJob = jobs.First(j => j.Date.Date == DateTime.Now.Date && addJob.WorkId == j.WorkId && j.Type == CURRENT_JOB_TYPE);
+                existingJob.Quantity += addJob.Quantity;
+                database.UpdateItem(this.Activity, existingJob, JOB_TABLE_NAME);
+            }
+            else
+            {
+                database.PutItem(this.Activity, addJob, JOB_TABLE_NAME);
+            }
+
+            Dismiss();
+
+            this.Activity.FinishAffinity();
+            var intent = new Intent(this.Activity, typeof(MainActivity));
+            StartActivity(intent);
         }
 
         private void ShowJobDialogDeleteButton_Click(object sender, EventArgs e)
@@ -125,6 +189,7 @@ namespace FakroApp.Fragments
 
         private void ShowJobDialogEditButton_Click(object sender, EventArgs e)
         {
+            Dismiss();
             var dialog_EditJob = new AddJobDialogFragment();
             Bundle args = new Bundle();
             args.PutInt(CHOOSEN_JOB_ID_EXTRA_NAME, job.Id);
@@ -133,7 +198,6 @@ namespace FakroApp.Fragments
             dialog_EditJob.Show(fragmentTransaction, TAG);
 
 
-            Dismiss();
 
         }
 

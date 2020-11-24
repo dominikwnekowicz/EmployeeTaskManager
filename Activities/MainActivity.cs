@@ -72,28 +72,12 @@ namespace FakroApp.Activities
             {
                 currentJobsListView.Visibility = ViewStates.Visible;
                 reserveJobsListView.Visibility = ViewStates.Gone;
-                CountMonthlyNorm();
 
             }
             else if (e.Tab.Position == 1)
             {
                 currentJobsListView.Visibility = ViewStates.Gone;
                 reserveJobsListView.Visibility = ViewStates.Visible;
-                var minutesDailyDeficit = Math.Ceiling(480 - DailyMinutes());
-                TextView monthNormTextView = FindViewById<TextView>(Resource.Id.monthNormTextView);
-                if (minutesDailyDeficit > 0)
-                {
-                    monthNormTextView.Text = "Brak: " + minutesDailyDeficit + " min.";
-                    monthNormTextView.SetTextColor(Android.Graphics.Color.Red);
-                }
-                else
-                {
-                    monthNormTextView.Text = "Norma zrobiona";
-                    monthNormTextView.SetTextColor(new Android.Graphics.Color(ContextCompat.GetColor(this, Resource.Color.colorAccent)));
-                }
-                monthNormTextView.Visibility = ViewStates.Visible;
-
-                if (minutesDailyDeficit == 480) monthNormTextView.Visibility = ViewStates.Gone;
             }
         }
 
@@ -112,58 +96,49 @@ namespace FakroApp.Activities
             reserveJobsListView.Adapter = reserveJobsListViewAdapter;
         }
 
-        private double DailyMinutes()
-        {
-            works = (List<Work>)database.GetItems(this, WORK_TABLE_NAME).Result;
-            var dailyJobs = jobs.Where(j => DateTime.Today.Date == j.Date.Date && j.Type == CURRENT_JOB_TYPE);
-            double dailyMinutes = 0;
-            if (dailyJobs.Any())
-            {
-                foreach (var job in dailyJobs)
-                {
-                    if (job.IsNormalized) dailyMinutes += works.FirstOrDefault(w => w.Id == job.WorkId).Norm * job.Quantity;
-                    else dailyMinutes += Convert.ToDouble(job.Time, CultureInfo.InvariantCulture);
-                }
-                dailyMinutes += 20;
-            }
-
-            return dailyMinutes;
-        }
-
         private void CountMonthlyNorm()
         {
-            double monthNormsSum = 0;
-            List<double> dailyNorms = new List<double>();
+            double monthMinutes = 0;
+            List<double> dailyMinutes = new List<double>();
             works = (List<Work>)database.GetItems(this, WORK_TABLE_NAME).Result;
             for (int i = 1; i <= DateTime.Today.Day; i++)
             {
                 var dailyJobs = jobs.Where(j => j.Date.Month == DateTime.Today.Month && j.Date.Year == DateTime.Today.Year && j.Date.Day == i && j.Type == CURRENT_JOB_TYPE);
                 if (dailyJobs.Any())
                 {
-                    double dailyMinutes = 0;
+                    double dateMinutes = 0;
                     foreach (var job in dailyJobs)
                     {
-                        if(job.IsNormalized) dailyMinutes += works.FirstOrDefault(w => w.Id == job.WorkId).Norm * job.Quantity;
-                        else dailyMinutes += Convert.ToDouble(job.Time, CultureInfo.InvariantCulture);
+                        if(job.IsNormalized) dateMinutes += works.FirstOrDefault(w => w.Id == job.WorkId).Norm * job.Quantity;
+                        else dateMinutes += Convert.ToDouble(job.Time, CultureInfo.InvariantCulture);
                     }
-                    dailyNorms.Add((dailyMinutes + 20) / 4.8);
+                    dailyMinutes.Add(dateMinutes);
                 }
             }
-            foreach (var norm in dailyNorms) monthNormsSum += norm;
-            var monthlyNorm = Math.Round(monthNormsSum / dailyNorms.Count, 2);
+            foreach (var minutes in dailyMinutes) monthMinutes += minutes;
+            var monthlyNorm = Math.Round((monthMinutes / dailyMinutes.Count)/4.6, 2);
             TextView monthNormTextView = FindViewById<TextView>(Resource.Id.monthNormTextView);
             monthNormTextView.Text = "Miesięczna norma: " + monthlyNorm + "%";
+            TextView monthTimeTextView = FindViewById<TextView>(Resource.Id.monthTimeTextView);
+            monthTimeTextView.Text = Math.Round((monthMinutes / dailyMinutes.Count)/60, 2).ToString() + "h";
             monthNormTextView.Visibility = ViewStates.Visible;
-            if (monthlyNorm < 99)
+            monthTimeTextView.Visibility = ViewStates.Visible;
+            if ((monthMinutes / dailyMinutes.Count) < 460)
             {
                 monthNormTextView.SetTextColor(Android.Graphics.Color.Red);
+                monthTimeTextView.SetTextColor(Android.Graphics.Color.Red);
             }
             else
             {
                 monthNormTextView.SetTextColor(new Android.Graphics.Color(ContextCompat.GetColor(this, Resource.Color.colorAccent)));
+                monthTimeTextView.SetTextColor(new Android.Graphics.Color(ContextCompat.GetColor(this, Resource.Color.colorAccent)));
             }
 
-            if (!dailyNorms.Any()) monthNormTextView.Visibility = Android.Views.ViewStates.Gone;
+            if (!dailyMinutes.Any())
+            {
+                monthNormTextView.Visibility = ViewStates.Gone;
+                monthTimeTextView.Visibility = ViewStates.Gone;
+            }
         }
 
         public void OnDismiss(IDialogInterface dialog)

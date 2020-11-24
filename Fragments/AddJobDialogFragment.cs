@@ -108,6 +108,7 @@ namespace FakroApp.Fragments
                 addJobDialogDescriptionLinearLayout.Visibility = ViewStates.Gone;
                 addJobDialogWorkIdLinearLayout.Visibility = ViewStates.Visible;
                 addJobDialogTimeLinearLayout.Visibility = ViewStates.Gone;
+                addJobDialogJobTypeSpinner.Enabled = true;
             }
             else
             {
@@ -117,6 +118,8 @@ namespace FakroApp.Fragments
                 addJobDialogDescriptionLinearLayout.Visibility = ViewStates.Visible;
                 addJobDialogWorkIdLinearLayout.Visibility = ViewStates.Gone;
                 addJobDialogTimeLinearLayout.Visibility = ViewStates.Visible;
+                addJobDialogJobTypeSpinner.SetSelection(0);
+                addJobDialogJobTypeSpinner.Enabled = false;
             }
         }
 

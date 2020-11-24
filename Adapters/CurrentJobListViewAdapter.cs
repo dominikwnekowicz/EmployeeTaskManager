@@ -69,11 +69,11 @@ namespace FakroApp.Adapters
                 jobDateTextView.Visibility = ViewStates.Visible;
 
                 TextView jobDayTimeTextView = view.FindViewById<TextView>(Resource.Id.jobDayTimeTextView);
-                jobDayTimeTextView.Text = Math.Round((dayTime), 2).ToString();
+                jobDayTimeTextView.Text = Math.Round((dayTime/60), 2).ToString() + "h";
                 jobDayTimeTextView.Visibility = ViewStates.Visible;
 
                 TextView jobDayPercentsTextView = view.FindViewById<TextView>(Resource.Id.jobDayPercentsTextView);
-                jobDayPercentsTextView.Text = Math.Round((dayPercents), 2).ToString();
+                jobDayPercentsTextView.Text = Math.Round((dayPercents), 2).ToString() + "%";
                 jobDayPercentsTextView.Visibility = ViewStates.Visible;
 
                 View jobDateDividerView = view.FindViewById<View>(Resource.Id.jobDateDividerView);

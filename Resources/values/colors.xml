@@ -5,4 +5,7 @@
     <color name="colorAccent">#257bac</color>
     <color name="colorControlHighlight">#000000</color>
     <color name="colorButtonNormal">#ac5225</color>
+    <color name="colorCustomRed">#FFaa0000</color>
+    <color name="colorCustomRedTransparent">#1aaa0000</color>
+    <color name="colorPrimaryDarkTransparent">#1a0b4000</color>
 </resources>

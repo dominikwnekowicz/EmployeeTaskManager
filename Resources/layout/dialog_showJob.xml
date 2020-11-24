@@ -25,14 +25,16 @@
 
         <TextView
             android:text="Minut: "
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:width="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/showJobDialogTimeTextView"
+            android:textAlignment="textStart"
             android:width="200dp"
+            android:paddingLeft="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -47,14 +49,16 @@
 
         <TextView
             android:text="Robota: "
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:width="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/showJobDialogChooseWorkTextView"
+            android:textAlignment="textStart"
             android:width="200dp"
+            android:paddingLeft="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -70,54 +74,76 @@
         <TextView
             android:text="Ilość: "
             android:width="100dp"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:layout_width="wrap_content"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             android:gravity="center" />
 
         <TextView
             android:id="@+id/showJobDialogQuantityTextView"
+            android:textAlignment="textStart"
             android:width="200dp"
+            android:paddingLeft="15dp"
             android:layout_width="match_parent"
-            android:layout_height="75dp"/>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
         
         <LinearLayout
-        android:id="@+id/showJobDialogJobTypeLinearLayout"
+        android:id="@+id/showJobDialogNeedTodayLinearLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:padding="10dp"
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="Typ: "
-            android:textAlignment="center"
+            android:text="Do normy: "
+            android:textAlignment="textEnd"
             android:width="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:width="200dp"
-            android:id="@+id/showJobDialogJobTypeTextView"
+            android:paddingLeft="15dp"
+            android:textAlignment="textStart"
+            android:id="@+id/showJobDialogNeedTodayTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
-    <TextView
-        android:text="@string/IsNormalized"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/showJobDialogIsNormalizedTextView"
-        android:layout_gravity="center_horizontal"
-    />
-
-        <LinearLayout
+    <LinearLayout
+        android:id="@+id/showJobDialogIsNormalizedLinearLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:padding="10dp"
         android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Normowane: "
+            android:textAlignment="textEnd"
+            android:width="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="@string/IsNormalized"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/showJobDialogIsNormalizedTextView"
+            android:width="200dp"
+            android:paddingLeft="15dp"
+            android:textAlignment="textStart"
+         />
+
+    </LinearLayout>
+
+    <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:padding="10dp"
+    android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/showJobDialogCloseButton"
@@ -155,4 +181,31 @@
 
     </LinearLayout>
 
+    <LinearLayout
+    android:padding="10dp"
+    android:id="@+id/showJobDialogAddQuantityLinearLayout"
+    android:visibility="gone"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Dodaj: "
+            android:width="100dp"
+            android:textAlignment="textEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"/>
+
+        <NumberPicker
+            android:id="@+id/showJobDialogAddQuantityNumberPicker"
+            android:width="200dp"
+            android:alpha="30"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"/>
+
+    </LinearLayout>
 </LinearLayout>

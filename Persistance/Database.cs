@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using FakroApp.Model;
@@ -246,5 +248,27 @@ namespace FakroApp.Persistance
         }
 
 
+    }
+
+    public static class DataManager
+    {
+        public static double GetDailyMinutes(Activity activity)
+        {
+            Database database = new Database();
+            var works = (List<Work>)database.GetItems(activity, WORK_TABLE_NAME).Result;
+            var jobs = (List<Job>)database.GetItems(activity, JOB_TABLE_NAME).Result;
+            var dailyJobs = jobs.Where(j => DateTime.Today.Date == j.Date.Date && j.Type == CURRENT_JOB_TYPE);
+            double dailyMinutes = 0;
+            if (dailyJobs.Any())
+            {
+                foreach (var job in dailyJobs)
+                {
+                    if (job.IsNormalized) dailyMinutes += works.FirstOrDefault(w => w.Id == job.WorkId).Norm * job.Quantity;
+                    else dailyMinutes += Convert.ToDouble(job.Time, CultureInfo.InvariantCulture);
+                }
+            }
+
+            return dailyMinutes;
+        }
     }
 }
