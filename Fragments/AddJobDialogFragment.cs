@@ -51,6 +51,7 @@ namespace FakroApp.Fragments
             EditText addJobDialogDescriptionEditText = view.FindViewById<EditText>(Resource.Id.addJobDialogDescriptionEditText);
 
             addJobDialogJobTypeSpinner = view.FindViewById<Spinner>(Resource.Id.addJobDialogJobTypeSpinner);
+            addJobDialogJobTypeSpinner.ItemSelected += AddJobDialogJobTypeSpinner_ItemSelected;
 
             var addJobDialogCancelButton = view.FindViewById<Button>(Resource.Id.addJobDialogCancelButton);
             addJobDialogCancelButton.Click += AddJobDialogCancelButton_Click;
@@ -89,10 +90,27 @@ namespace FakroApp.Fragments
 
                 var isNormalized = job.IsNormalized;
 
-                if(job.Time.HasValue) addJobDialogTimeEditText.Text = job.Time.Value.ToString(); ;
+                if(job.Time.HasValue) addJobDialogTimeEditText.Text = job.Time.Value.ToString(); ;  
             }
             
             return view;
+        }
+
+        private void AddJobDialogJobTypeSpinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            switch(e.Position)
+            {
+                case 0:
+                    addJobDialogIsNormalizedCheckBox.Enabled = true;
+                    return;
+                case 1:
+                    addJobDialogIsNormalizedCheckBox.Enabled = false;
+                    addJobDialogIsNormalizedCheckBox.Selected = true;
+                    return;
+                default:
+                    return;
+
+            }
         }
 
         private void AddJobDialogIsNormalizedCheckBox_CheckedChange(object sender, CompoundButton.CheckedChangeEventArgs e)

@@ -97,10 +97,10 @@ namespace FakroApp.Fragments
             else if (job.Type == RESERVE_JOB_TYPE)
             {
                 var dailyTime = DataManager.GetDailyMinutes(this.Activity);
-                needToday = Convert.ToInt32(Math.Ceiling((460 - dailyTime) / choosenWork.Norm));
+                needToday = (int)Math.Round((460 - dailyTime) / choosenWork.Norm);
                 if (dailyTime < 460)
                 {
-                    if (needToday <= job.Quantity) showJobDialogAddQuantityNumberPicker.Value = Convert.ToInt32(Math.Ceiling((460 - dailyTime) / choosenWork.Norm));
+                    if (needToday <= job.Quantity) showJobDialogAddQuantityNumberPicker.Value = (int)Math.Round((460 - dailyTime) / choosenWork.Norm);
                     else
                     {
                         showJobDialogAddQuantityNumberPicker.Value = job.Quantity;
