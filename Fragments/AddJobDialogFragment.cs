@@ -69,28 +69,38 @@ namespace FakroApp.Fragments
             
             if(Arguments != null)
             {
-                int jobId = Arguments.GetInt(CHOOSEN_JOB_ID_EXTRA_NAME);
-                addJobDialogAddButton.Text = GetString(Resource.String.Save);
-                var jobs = (List<Job>)database.GetItems(this.Activity, JOB_TABLE_NAME).Result;
-                job = jobs.FirstOrDefault(j => j.Id == jobId);
-                SelectWork(job.WorkId);
-
-                if (job.Type == CURRENT_JOB_TYPE)
+                if(Tag == MAIN_ACTIVITY_TAG)
                 {
-                    addJobDialogJobTypeSpinner.SetSelection(0);
+                    int jobId = Arguments.GetInt(CHOOSEN_JOB_ID_EXTRA_NAME);
+                    addJobDialogAddButton.Text = GetString(Resource.String.Save);
+                    var jobs = (List<Job>)database.GetItems(this.Activity, JOB_TABLE_NAME).Result;
+                    job = jobs.FirstOrDefault(j => j.Id == jobId);
+                    SelectWork(job.WorkId);
+
+                    if (job.Type == CURRENT_JOB_TYPE)
+                    {
+                        addJobDialogJobTypeSpinner.SetSelection(0);
+                    }
+                    else if (job.Type == RESERVE_JOB_TYPE)
+                    {
+                        addJobDialogJobTypeSpinner.SetSelection(1);
+                    }
+
+                    addJobDialogQuantityNumberPicker.Value = job.Quantity;
+
+                    addJobDialogDescriptionEditText.Text = job.Description;
+
+                    var isNormalized = job.IsNormalized;
+
+                    if (job.Time.HasValue) addJobDialogTimeEditText.Text = job.Time.Value.ToString(); ;
                 }
-                else if (job.Type == RESERVE_JOB_TYPE)
+                else if(Tag == WORK_LISTVIEW_ADAPTER_TAG)
                 {
-                    addJobDialogJobTypeSpinner.SetSelection(1);
+                    int workId = Arguments.GetInt(CHOOSEN_WORK_ID_EXTRA_NAME);
+                    SelectWork(workId);
+                    var quantity = DataManager.GetNeededQuantity(this.Activity, choosenWork);
+                    if(quantity != 0) addJobDialogQuantityNumberPicker.Value = quantity;
                 }
-
-                addJobDialogQuantityNumberPicker.Value = job.Quantity;
-
-                addJobDialogDescriptionEditText.Text = job.Description;
-
-                var isNormalized = job.IsNormalized;
-
-                if(job.Time.HasValue) addJobDialogTimeEditText.Text = job.Time.Value.ToString(); ;  
             }
             
             return view;

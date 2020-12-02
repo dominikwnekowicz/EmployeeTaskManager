@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="Activities\MyActionBarDrawerToggle.cs" />
     <Compile Include="Activities\PermissionsActivity.cs" />
     <Compile Include="Activities\WorkActivity.cs" />
     <Compile Include="Adapters\CurrentJobListViewAdapter.cs" />
@@ -182,6 +183,21 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\numberPickerShapeTransparentRed.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\rightDrawer_mainLayout.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\mainContent_mainLayout.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\main_menu.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

@@ -20,10 +20,10 @@ using FakroApp.Fragments;
 
 namespace FakroApp.Activities
 {
-    [Activity(Label = "WorksActivity")]
+    [Activity(Label = "WorkActivity")]
     public class WorkActivity : AppCompatActivity, IDialogInterfaceOnDismissListener
     {
-        const string TAG = "WorksActivity";
+        const string TAG = WORK_ACTIVITY_TAG;
 
         SupportToolbar toolbar;
         ListView worksListView;
@@ -54,7 +54,7 @@ namespace FakroApp.Activities
                 else latestWorks.Add(work);
             }
             worksListView = FindViewById<ListView>(Resource.Id.worksListView);
-            worksListViewAdapter = new WorkListViewAdapter(this, latestWorks);
+            worksListViewAdapter = new WorkListViewAdapter(this, latestWorks, TAG);
             worksListView.Adapter = worksListViewAdapter;
 
             var workFloatingActionButton = FindViewById<FloatingActionButton>(Resource.Id.workFloatingActionButton);
@@ -85,7 +85,7 @@ namespace FakroApp.Activities
         public void OnDismiss(IDialogInterface dialog)
         {
             works = (List<Work>)database.GetItems(this, WORK_TABLE_NAME).Result;
-            worksListViewAdapter = new WorkListViewAdapter(this, works);
+            worksListViewAdapter = new WorkListViewAdapter(this, works, TAG);
             worksListView.Adapter = worksListViewAdapter;
         }
     }

@@ -14,6 +14,13 @@ namespace FakroApp.Persistance
 {
     public class Constants
     {
+        //Drawers
+        public const string RIGHT_DRAWER_TAG = "RightDrawer";
+        public const string LEFT_DRAWER_TAG = "LeftDrawer";
+        public const string MAIN_ACTIVITY_TAG = "MainActivity";
+        public const string WORK_ACTIVITY_TAG = "WorkActivity";
+        public const string WORK_LISTVIEW_ADAPTER_TAG = "WorkListViewAdapter";
+
         //Table names
         public const string DAYOFF_TABLE_NAME = "DayOff";
         public const string JOB_TABLE_NAME = "Job";

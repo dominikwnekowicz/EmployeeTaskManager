@@ -19,6 +19,8 @@ using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Support.V4.Content;
 using System.Globalization;
+using Android.Support.V4.Widget;
+using Android.Content.Res;
 
 namespace FakroApp.Activities
 {
@@ -26,7 +28,7 @@ namespace FakroApp.Activities
     public class MainActivity : AppCompatActivity, IDialogInterfaceOnDismissListener
     {
 
-        public readonly string TAG = "MainActivity";
+        public readonly string TAG = MAIN_ACTIVITY_TAG;
 
         Database database;
         SupportToolbar toolbar;
@@ -34,8 +36,14 @@ namespace FakroApp.Activities
         List<Work> works;
         ListView currentJobsListView;
         ListView reserveJobsListView;
+        ListView mainLayoutRightDrawerWorksListView;
         CurrentJobListViewAdapter currentJobsListViewAdapter;
         ReserveJobListViewAdapter reserveJobsListViewAdapter;
+        DrawerLayout drawerLayout;
+        LinearLayout rightDrawer_mainLayoutLinearLayout;
+        MyActionBarDrawerToggle drawerToggle;
+
+        WorkListViewAdapter mainLayoutRightDrawerWorksListViewAdapter;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -62,6 +70,19 @@ namespace FakroApp.Activities
                 dialog_AddJob.Show(transaction, TAG);
             };
 
+            //Drawers
+
+            drawerLayout = FindViewById<DrawerLayout>(Resource.Id.mainLayoutDrawerLayout);
+
+            drawerToggle = new MyActionBarDrawerToggle(this, drawerLayout);
+
+            drawerLayout.AddDrawerListener(drawerToggle);
+            SupportActionBar.SetHomeButtonEnabled(true);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            drawerToggle.SyncState();
+
+            rightDrawer_mainLayoutLinearLayout = FindViewById<LinearLayout>(Resource.Id.rightDrawer_mainLayoutLinearLayout);
+            rightDrawer_mainLayoutLinearLayout.Tag = RIGHT_DRAWER_TAG;
 
             CountMonthlyNorm();
         }
@@ -94,6 +115,17 @@ namespace FakroApp.Activities
             currentJobsListView.Adapter = currentJobsListViewAdapter;
             reserveJobsListViewAdapter = new ReserveJobListViewAdapter(this, jobs.Where(j => j.Type == RESERVE_JOB_TYPE).ToList());
             reserveJobsListView.Adapter = reserveJobsListViewAdapter;
+
+            works = (List<Work>)database.GetItems(this, WORK_TABLE_NAME).Result;
+            List<Work> latestWorks = new List<Work>();
+            foreach (var work in works)
+            {
+                if (latestWorks.Any(w => w.WorkCode == work.WorkCode)) latestWorks[latestWorks.FindIndex(w => w.WorkCode == work.WorkCode)] = work;
+                else latestWorks.Add(work);
+            }
+            mainLayoutRightDrawerWorksListView = FindViewById<ListView>(Resource.Id.mainLayoutRightDrawerWorksListView);
+            mainLayoutRightDrawerWorksListViewAdapter = new WorkListViewAdapter(this, latestWorks, TAG);
+            mainLayoutRightDrawerWorksListView.Adapter = mainLayoutRightDrawerWorksListViewAdapter;
         }
 
         private void CountMonthlyNorm()
@@ -140,6 +172,72 @@ namespace FakroApp.Activities
                 monthTimeTextView.Visibility = ViewStates.Gone;
             }
         }
+
+        //Menu item selected
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Android.Resource.Id.Home:
+                    //Ensure the right drawer is closed
+                    drawerLayout.CloseDrawer(rightDrawer_mainLayoutLinearLayout);
+                    drawerToggle.OnOptionsItemSelected(item);
+                    return true;
+
+                case Resource.Id.action_rightDrawerMainMenu:
+                    if (drawerLayout.IsDrawerOpen(rightDrawer_mainLayoutLinearLayout))
+                    {
+                        //Right Drawer is already open, close it
+                        drawerLayout.CloseDrawer(rightDrawer_mainLayoutLinearLayout);
+                    }
+                    else
+                    {
+                        //Right Drawer is already closed, open it and just in case close left drawer
+                        drawerLayout.OpenDrawer(rightDrawer_mainLayoutLinearLayout);
+                        //drawerLayout.CloseDrawer(leftDrawer_mainLayoutLinearLayout);
+                    }
+
+                    return true;
+                default:
+                    return base.OnOptionsItemSelected(item);
+
+            }
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.main_menu, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+
+        //Using for drawers
+
+        protected override void OnSaveInstanceState(Bundle outState)
+        {
+            if (drawerLayout.IsDrawerOpen((int)GravityFlags.Left))
+            {
+                outState.PutString("DrawerState", "Opened");
+            }
+            else
+            {
+                outState.PutString("DrawerState", "Closed");
+            }
+            base.OnSaveInstanceState(outState);
+        }
+
+        protected override void OnPostCreate(Bundle savedInstanceState)
+        {
+            base.OnPostCreate(savedInstanceState);
+
+            drawerToggle.SyncState();
+        }
+
+        public override void OnConfigurationChanged(Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+            drawerToggle.OnConfigurationChanged(newConfig);
+        }
+
 
         public void OnDismiss(IDialogInterface dialog)
         {

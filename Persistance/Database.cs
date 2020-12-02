@@ -252,12 +252,12 @@ namespace FakroApp.Persistance
 
     public static class DataManager
     {
-        public static double GetDailyMinutes(Activity activity)
+        public static double GetDailyMinutes(Activity activity, DateTime dateTime)
         {
             Database database = new Database();
             var works = (List<Work>)database.GetItems(activity, WORK_TABLE_NAME).Result;
             var jobs = (List<Job>)database.GetItems(activity, JOB_TABLE_NAME).Result;
-            var dailyJobs = jobs.Where(j => DateTime.Today.Date == j.Date.Date && j.Type == CURRENT_JOB_TYPE);
+            var dailyJobs = jobs.Where(j => dateTime.Date == j.Date.Date && j.Type == CURRENT_JOB_TYPE);
             double dailyMinutes = 0;
             if (dailyJobs.Any())
             {
@@ -269,6 +269,23 @@ namespace FakroApp.Persistance
             }
 
             return dailyMinutes;
+        }
+        public static int GetNeededQuantity(Activity activity, Work work)
+        {
+            var minutes = GetDailyMinutes(activity, DateTime.Now);
+            int quantity = 0;
+            if (minutes < 460)
+            {
+                var minutesNeeded = 460 - minutes;
+                var jobQuantity = Math.Round(minutesNeeded / work.Norm, 2);
+                if ((jobQuantity - (int)jobQuantity) > 0)
+                {
+                    jobQuantity = Math.Ceiling(jobQuantity);
+                }
+                quantity = (int)jobQuantity;
+            }
+
+            return quantity;
         }
     }
 }

@@ -33,7 +33,7 @@
             android:textAlignment="textEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        </LinearLayout>>
+        </LinearLayout>
     <View
         android:id="@+id/jobDateDividerView"
         android:paddingVertical="5dp"

@@ -1,8 +1,9 @@
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
     
     <android.support.v7.widget.Toolbar
@@ -14,106 +15,22 @@
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Dark" />
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/mainTabLayout"
+    <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabGravity="fill"
-        app:tabMode="fixed"
-        android:layout_below="@id/mainToolbar"
-        app:tabSelectedTextColor="@color/colorButtonNormal"
-        app:tabTextColor="#000000"
-        android:background="@android:color/white">
+        android:layout_height="match_parent"
+        android:id="@+id/mainLayoutDrawerLayout">
 
-        <android.support.design.widget.TabItem
-            android:text="@string/Current"
-            android:background="@android:color/white"
+        <include
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <android.support.design.widget.TabItem
-            android:text="@string/Reserve"
-            android:background="@android:color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </android.support.design.widget.TabLayout>
-
-    <ListView
-        android:listSelector="@android:color/transparent"
-        android:stackFromBottom="true"
-        android:layout_below="@id/mainTabLayout"
-        android:layout_above="@id/jobsBottomLinearLayout"
-        android:id="@+id/currentJobsListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <ListView
-        android:listSelector="@android:color/transparent"
-        android:visibility="gone"
-        android:layout_below="@id/mainTabLayout"
-        android:layout_above="@id/jobsBottomLinearLayout"
-        android:id="@+id/reserveJobsListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:id="@+id/jobsBottomLinearLayout"
-        android:layout_height="wrap_content">
-        
-    
-
-    <View style="@style/Divider" android:layout_height="2dp" android:background="@android:color/black"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:padding="5dp"
-                android:textAlignment="textStart"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
-                android:id="@+id/monthNormTextView"
-            />
-            <TextView
-                android:layout_width="0dp"
-                android:padding="5dp"
-                android:textAlignment="textEnd"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
-                android:id="@+id/monthTimeTextView"
-            />
-        </LinearLayout>>
-
-        <View style="@style/Divider" android:layout_height="2dp" android:background="@android:color/black"/>
-
-    <LinearLayout
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        >
-        <ImageButton
-            android:text="@string/AddJob"
-            android:id="@+id/AddJobButton"
-            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:src="@android:drawable/ic_menu_add"
-            android:background="@android:color/white"
-            />
-    </LinearLayout>
-    </LinearLayout>
+            layout="@layout/mainContent_mainLayout"/>
 
-</RelativeLayout>
+        <include
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            layout="@layout/rightDrawer_mainLayout"
+            />
+
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>

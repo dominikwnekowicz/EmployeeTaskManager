@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">FakroApp</string>
     <string name="action_settings">Settings</string>
+    <string name="openDrawer">Drawer Open</string>
+    <string name="closeDrawer">Drawer Closed</string>
 
   <!--Job types-->
     <string name="Current">Aktualna</string>
